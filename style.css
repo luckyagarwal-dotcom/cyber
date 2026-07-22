@@ -1,0 +1,285 @@
+* {
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+
+
+body {
+
+    font-family:Arial, sans-serif;
+
+    background:#fafafa;
+
+}
+
+
+
+/* Header */
+
+header {
+
+    height:60px;
+
+    border-bottom:1px solid #ddd;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    background:white;
+
+}
+
+
+
+.logo {
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#1da1f2;
+
+    font-style:italic;
+
+}
+
+
+
+.menu {
+
+    display:flex;
+
+    gap:25px;
+
+    font-size:18px;
+
+}
+
+
+
+.menu a {
+
+    text-decoration:none;
+
+    color:#333;
+
+}
+
+
+
+/* Main */
+
+main {
+
+    min-height:calc(100vh - 60px);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+
+h2 {
+
+    margin-bottom:30px;
+
+}
+
+
+
+/* Shared Image Viewer */
+
+.image-box {
+
+    width:500px;
+
+    max-width:90%;
+
+    height:700px;
+
+
+    background:white;
+
+    padding:20px;
+
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+
+
+    overflow:auto;
+
+}
+
+
+
+.image-box img {
+
+    width:100%;
+
+    height:auto;
+
+    display:block;
+
+}
+
+
+
+/* Captured Result */
+
+.camera-result {
+
+    margin-top:30px;
+
+    text-align:center;
+
+}
+
+
+
+#capturedImage {
+
+    width:300px;
+
+    max-width:90%;
+
+    border-radius:10px;
+
+}
+
+
+
+/* Popup */
+
+.popup-overlay {
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+
+    background:rgba(0,0,0,0.6);
+
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+
+    z-index:9999;
+
+}
+
+
+
+.popup-box {
+
+    background:white;
+
+    width:350px;
+
+    padding:30px;
+
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+
+
+.popup-box h3 {
+
+    margin-bottom:15px;
+
+}
+
+
+
+.popup-box p {
+
+    margin-bottom:20px;
+
+    color:#555;
+
+}
+
+
+
+button {
+
+    padding:10px 25px;
+
+    border:none;
+
+    border-radius:6px;
+
+
+    background:#1da1f2;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+/* Mobile */
+
+@media(max-width:600px){
+
+
+    header {
+
+        padding:0 15px;
+
+    }
+
+
+    .logo {
+
+        font-size:22px;
+
+    }
+
+
+    .image-box {
+
+        width:95%;
+
+        height:600px;
+
+    }
+
+}

