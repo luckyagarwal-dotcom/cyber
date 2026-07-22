@@ -37,15 +37,13 @@ header {
 }
 
 
-.logo {
+.logo img {
 
-    font-size:28px;
+    height:40px;
 
-    font-weight:bold;
+    width:auto;
 
-    color:#1da1f2;
-
-    font-style:italic;
+    display:block;
 
 }
 
