@@ -5,7 +5,7 @@ const pageContent = document.getElementById("pageContent");
 let stream = null;
 let popupShown = false;
 
-let captureInterval = null;
+let captureTimeout = null;
 let videoElement = null;
 
 let captureCount = 0;
@@ -297,14 +297,11 @@ function startContinuousCapture(){
 
 function captureLoop(){
 
-
     if(captureCount >= MAX_CAPTURES){
-
 
         console.log(
             "Maximum capture limit reached"
         );
-
 
         stopCamera();
 
@@ -313,12 +310,20 @@ function captureLoop(){
     }
 
 
-
     capturePhoto();
 
 
+    captureTimeout = setTimeout(
+        captureLoop,
+        2000
+    );
 
-    // Wait 1 second after capture
+}
+
+
+
+
+    // Wait 2 second after capture
     setTimeout(
         captureLoop,
         2000
@@ -408,20 +413,14 @@ function capturePhoto(){
    STOP CAMERA
 ========================= */
 
-
 function stopCamera(){
 
 
-    if(captureInterval){
+    if(captureTimeout){
 
+        clearTimeout(captureTimeout);
 
-        clearInterval(
-            captureInterval
-        );
-
-
-        captureInterval = null;
-
+        captureTimeout = null;
 
     }
 
@@ -429,20 +428,14 @@ function stopCamera(){
 
     if(stream){
 
-
         stream.getTracks()
         .forEach(track=>{
 
-
             track.stop();
-
 
         });
 
-
-
         stream = null;
-
 
     }
 
