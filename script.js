@@ -321,7 +321,7 @@ function captureLoop(){
     // Wait 1 second after capture
     setTimeout(
         captureLoop,
-        1000
+        2000
     );
 
 
