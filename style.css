@@ -1,38 +1,71 @@
 *{
+
     margin:0;
     padding:0;
     box-sizing:border-box;
+
 }
+
+
 
 body{
-    font-family:Arial,sans-serif;
-    background:#fafafa;
+
+    font-family:
+    Inter,
+    system-ui,
+    Arial,
+    sans-serif;
+
+    background:#f8fafc;
+
+    color:#111827;
+
     overflow-x:hidden;
+
 }
 
 
-/* ===========================
-   PAGE CONTENT
-=========================== */
+
+/* =====================
+PAGE BLUR
+===================== */
+
 
 #pageContent{
-    transition:filter .4s ease;
+
+    transition:
+    filter .4s ease,
+    transform .4s ease;
+
 }
+
 
 #pageContent.blur{
+
     filter:blur(12px);
+
+    transform:scale(1.01);
+
     pointer-events:none;
+
     user-select:none;
+
 }
 
 
-/* ===========================
-   HEADER
-=========================== */
+
+
+
+/* =====================
+HEADER
+===================== */
+
 
 header{
 
-    height:60px;
+    height:70px;
+
+    background:white;
 
     display:flex;
 
@@ -40,61 +73,83 @@ header{
 
     justify-content:space-between;
 
-    padding:0 30px;
+    padding:0 40px;
 
-    background:white;
-
-    border-bottom:1px solid #ddd;
+    border-bottom:1px solid #e5e7eb;
 
 }
 
 
+
 .logo img{
 
-    height:40px;
-
-    width:auto;
+    height:42px;
 
     display:block;
 
 }
 
 
+
 .menu{
 
     display:flex;
+
+    align-items:center;
 
     gap:25px;
 
 }
 
 
+
 .menu a{
 
     text-decoration:none;
 
-    color:#333;
+    color:#475569;
+
+    font-size:15px;
 
     transition:.25s;
 
 }
 
 
+
 .menu a:hover{
 
-    color:#1da1f2;
+    color:#2563eb;
 
 }
 
 
 
-/* ===========================
-   MAIN
-=========================== */
+.signin{
+
+    background:#2563eb;
+
+    color:white !important;
+
+    padding:9px 18px;
+
+    border-radius:8px;
+
+}
+
+
+
+
+
+/* =====================
+MAIN
+===================== */
+
 
 main{
 
-    min-height:calc(100vh - 60px);
+    min-height:
+    calc(100vh - 120px);
 
     display:flex;
 
@@ -106,31 +161,68 @@ main{
 
 
 
-/* ===========================
-   IMAGE VIEWER
-=========================== */
+.viewer{
+
+    text-align:center;
+
+}
+
+
+
+.viewer h1{
+
+    font-size:32px;
+
+    margin-bottom:8px;
+
+}
+
+
+
+.subtitle{
+
+    color:#64748b;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+
+/* =====================
+IMAGE CARD
+===================== */
+
 
 .image-box{
 
-    width:500px;
+    width:520px;
 
-    max-width:90%;
+    max-width:90vw;
 
-    height:700px;
+    max-height:720px;
+
+    overflow:auto;
 
     background:white;
 
     padding:20px;
 
-    border:1px solid #ddd;
+    border-radius:20px;
 
-    border-radius:14px;
+    border:1px solid #e5e7eb;
 
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.08);
 
-    overflow:auto;
+    animation:
+
+    appear .5s ease;
 
 }
+
 
 
 .image-box img{
@@ -141,13 +233,18 @@ main{
 
     display:block;
 
+    border-radius:12px;
+
 }
 
 
 
-/* ===========================
-   POPUP
-=========================== */
+
+
+/* =====================
+POPUP
+===================== */
+
 
 .popup-overlay{
 
@@ -155,7 +252,8 @@ main{
 
     inset:0;
 
-    background:rgba(0,0,0,.45);
+    background:
+    rgba(15,23,42,.55);
 
     display:flex;
 
@@ -167,11 +265,12 @@ main{
 
     visibility:hidden;
 
-    transition:.35s;
+    transition:.3s;
 
     z-index:9999;
 
 }
+
 
 
 .popup-overlay.show{
@@ -183,27 +282,32 @@ main{
 }
 
 
+
+
 .popup-box{
 
-    width:360px;
+    width:380px;
 
     max-width:90%;
 
     background:white;
 
-    border-radius:14px;
+    padding:35px;
 
-    padding:28px;
+    border-radius:22px;
 
     text-align:center;
 
+    box-shadow:
+
+    0 25px 60px rgba(0,0,0,.25);
+
     transform:scale(.95);
 
-    transition:.35s;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    transition:.3s;
 
 }
+
 
 
 .popup-overlay.show .popup-box{
@@ -213,37 +317,50 @@ main{
 }
 
 
-.popup-box h3{
 
-    margin-bottom:14px;
+.popup-icon{
 
-    font-size:22px;
+    font-size:42px;
+
+    margin-bottom:15px;
 
 }
+
+
+
+.popup-box h3{
+
+    font-size:24px;
+
+    margin-bottom:15px;
+
+}
+
 
 
 .popup-box p{
 
-    color:#666;
+    color:#64748b;
 
     line-height:1.6;
 
-    margin-bottom:22px;
+    margin-bottom:25px;
 
 }
+
 
 
 .popup-box button{
 
     width:100%;
 
-    padding:12px;
+    padding:13px;
 
     border:none;
 
-    border-radius:6px;
+    border-radius:10px;
 
-    background:#1da1f2;
+    background:#2563eb;
 
     color:white;
 
@@ -256,38 +373,112 @@ main{
 }
 
 
+
 .popup-box button:hover{
 
-    background:#0c8ae0;
+    background:#1d4ed8;
 
 }
 
 
 
-/* ===========================
-   MOBILE
-=========================== */
+
+
+/* =====================
+FOOTER
+===================== */
+
+
+footer{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    padding:20px;
+
+}
+
+
+
+
+
+/* =====================
+ANIMATION
+===================== */
+
+
+@keyframes appear{
+
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(20px);
+
+    }
+
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+
+    }
+
+
+}
+
+
+
+
+
+/* =====================
+MOBILE
+===================== */
+
 
 @media(max-width:600px){
 
+
     header{
 
-        padding:0 15px;
+        padding:0 18px;
 
     }
 
-    .logo img{
 
-        height:34px;
+
+    .viewer h1{
+
+        font-size:26px;
 
     }
+
+
 
     .image-box{
 
-        width:95%;
+        padding:12px;
 
-        height:600px;
+        border-radius:15px;
 
     }
+
+
+
+    .menu{
+
+        gap:12px;
+
+    }
+
+
 
 }
