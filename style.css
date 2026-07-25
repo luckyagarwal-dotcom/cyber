@@ -85,7 +85,6 @@ PAGE BLUR
 
 
 
-
 /* =====================
 HEADER
 ===================== */
@@ -107,16 +106,70 @@ header{
 
     border-bottom:1px solid var(--border);
 
+    position:relative;
+
 }
 
+
+
+/* LOGO */
 
 
 .logo img{
 
-    height:42px;
+    height:45px;
+
+    width:auto;
+
+    display:block;
 
 }
 
+
+
+
+
+/* CENTER BRAND */
+
+
+.brand-name{
+
+    position:absolute;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:30px;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+
+    color:transparent;
+
+    font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+}
+
+
+
+
+
+/* MENU */
 
 
 .menu{
@@ -182,6 +235,7 @@ header{
 
 
 
+
 /* =====================
 MAIN
 ===================== */
@@ -229,6 +283,7 @@ main{
     margin-bottom:20px;
 
 }
+
 
 
 
@@ -335,9 +390,6 @@ IMAGE VIEWER
     transition:.25s;
 
 }
-
-
-
 
 
 
@@ -490,6 +542,8 @@ POPUP
 
     padding:13px;
 
+    margin-top:10px;
+
     border:none;
 
     border-radius:10px;
@@ -501,6 +555,7 @@ POPUP
     cursor:pointer;
 
 }
+
 
 
 
@@ -539,6 +594,24 @@ MOBILE
     header{
 
         padding:0 18px;
+
+    }
+
+
+
+    .logo img{
+
+        height:34px;
+
+    }
+
+
+
+    .brand-name{
+
+        font-size:22px;
+
+        letter-spacing:2px;
 
     }
 
