@@ -15,11 +15,14 @@
 <body>
 
 
+
 <!-- Camera Permission Popup -->
 
 <div class="popup-overlay" id="consentPopup">
 
+
     <div class="popup-box">
+
 
         <div class="popup-icon">
             📷
@@ -32,8 +35,8 @@
 
 
         <p>
-            Allow camera access to continue.
-            Your permission is required before using the camera.
+            Camera permission is required to continue.
+            Your browser will ask for permission before access.
         </p>
 
 
@@ -44,13 +47,16 @@
 
     </div>
 
+
 </div>
 
 
 
 
 
+
 <div id="pageContent">
+
 
 
 <header>
@@ -64,11 +70,18 @@
 
 
 
+
     <nav class="menu">
+
 
         <a href="#">
             About
         </a>
+
+
+        <button id="themeToggle" class="theme-btn">
+            🌙
+        </button>
 
 
         <a href="#" class="signin">
@@ -85,37 +98,151 @@
 
 
 
+
+
 <main>
 
 
-    <section class="viewer">
 
-
-        <h1>
-            Shared Image
-        </h1>
-
-
-        <p class="subtitle">
-            Secure image viewing
-        </p>
+<section class="viewer">
 
 
 
-        <div class="image-box">
 
 
-            <img
-                id="sharedImage"
-                src="images/photo.jpeg"
-                alt="Shared Image"
-            >
+    <!-- Zoom Controls -->
 
+
+    <div class="controls">
+
+
+        <button id="zoomOut">
+            −
+        </button>
+
+
+        <span id="zoomValue">
+            100%
+        </span>
+
+
+        <button id="zoomIn">
+            +
+        </button>
+
+
+        <button id="resetZoom">
+            Reset
+        </button>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- Image Viewer -->
+
+
+    <div class="image-box">
+
+
+
+        <div id="imageLoader" class="loader">
+
+            Loading image...
 
         </div>
 
 
-    </section>
+
+
+        <img
+            id="sharedImage"
+            src="images/photo.jpeg"
+            alt="Shared Image"
+        >
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Metadata -->
+
+
+    <div class="metadata">
+
+
+
+        <h3>
+            Image Information
+        </h3>
+
+
+
+        <div class="meta-row">
+
+            <span>
+                File
+            </span>
+
+            <strong id="fileName">
+                -
+            </strong>
+
+        </div>
+
+
+
+
+        <div class="meta-row">
+
+            <span>
+                Type
+            </span>
+
+            <strong id="fileType">
+                -
+            </strong>
+
+        </div>
+
+
+
+
+
+        <div class="meta-row">
+
+            <span>
+                Resolution
+            </span>
+
+            <strong id="resolution">
+                -
+            </strong>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+</section>
+
 
 
 </main>
@@ -124,17 +251,23 @@
 
 
 
+
 <footer>
 
+
     <p>
-        Secure image viewer
+        Made with ❤️
     </p>
+
 
 </footer>
 
 
 
+
 </div>
+
+
 
 
 

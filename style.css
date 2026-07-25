@@ -8,6 +8,31 @@
 
 
 
+:root{
+
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --text:#111827;
+    --secondary:#64748b;
+    --border:#e5e7eb;
+    --primary:#2563eb;
+
+}
+
+
+
+body.dark{
+
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:#f8fafc;
+    --secondary:#94a3b8;
+    --border:#334155;
+
+}
+
+
+
 body{
 
     font-family:
@@ -16,11 +41,13 @@ body{
     Arial,
     sans-serif;
 
-    background:#f8fafc;
+    background:var(--bg);
 
-    color:#111827;
+    color:var(--text);
 
     overflow-x:hidden;
+
+    transition:.3s;
 
 }
 
@@ -40,6 +67,7 @@ PAGE BLUR
 }
 
 
+
 #pageContent.blur{
 
     filter:blur(12px);
@@ -56,6 +84,8 @@ PAGE BLUR
 
 
 
+
+
 /* =====================
 HEADER
 ===================== */
@@ -65,7 +95,7 @@ header{
 
     height:70px;
 
-    background:white;
+    background:var(--card);
 
     display:flex;
 
@@ -75,7 +105,7 @@ header{
 
     padding:0 40px;
 
-    border-bottom:1px solid #e5e7eb;
+    border-bottom:1px solid var(--border);
 
 }
 
@@ -84,8 +114,6 @@ header{
 .logo img{
 
     height:42px;
-
-    display:block;
 
 }
 
@@ -97,7 +125,7 @@ header{
 
     align-items:center;
 
-    gap:25px;
+    gap:20px;
 
 }
 
@@ -107,11 +135,9 @@ header{
 
     text-decoration:none;
 
-    color:#475569;
+    color:var(--secondary);
 
     font-size:15px;
-
-    transition:.25s;
 
 }
 
@@ -119,7 +145,7 @@ header{
 
 .menu a:hover{
 
-    color:#2563eb;
+    color:var(--primary);
 
 }
 
@@ -127,7 +153,7 @@ header{
 
 .signin{
 
-    background:#2563eb;
+    background:var(--primary);
 
     color:white !important;
 
@@ -136,6 +162,21 @@ header{
     border-radius:8px;
 
 }
+
+
+
+.theme-btn{
+
+    border:none;
+
+    background:transparent;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
 
 
 
@@ -165,6 +206,8 @@ main{
 
     text-align:center;
 
+    padding:30px 0;
+
 }
 
 
@@ -181,9 +224,9 @@ main{
 
 .subtitle{
 
-    color:#64748b;
+    color:var(--secondary);
 
-    margin-bottom:30px;
+    margin-bottom:20px;
 
 }
 
@@ -191,8 +234,62 @@ main{
 
 
 
+
 /* =====================
-IMAGE CARD
+ZOOM CONTROLS
+===================== */
+
+
+.controls{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.controls button{
+
+    border:1px solid var(--border);
+
+    background:var(--card);
+
+    color:var(--text);
+
+    padding:8px 14px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+#zoomValue{
+
+    min-width:60px;
+
+    color:var(--secondary);
+
+}
+
+
+
+
+
+
+
+/* =====================
+IMAGE VIEWER
 ===================== */
 
 
@@ -206,20 +303,18 @@ IMAGE CARD
 
     overflow:auto;
 
-    background:white;
+    background:var(--card);
 
     padding:20px;
 
     border-radius:20px;
 
-    border:1px solid #e5e7eb;
+    border:1px solid var(--border);
 
     box-shadow:
     0 20px 40px rgba(0,0,0,.08);
 
-    animation:
-
-    appear .5s ease;
+    position:relative;
 
 }
 
@@ -235,7 +330,85 @@ IMAGE CARD
 
     border-radius:12px;
 
+    transform-origin:center;
+
+    transition:.25s;
+
 }
+
+
+
+
+
+
+
+
+
+
+/* =====================
+METADATA
+===================== */
+
+
+.metadata{
+
+    margin-top:25px;
+
+    background:var(--card);
+
+    width:520px;
+
+    max-width:90vw;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    border:1px solid var(--border);
+
+    text-align:left;
+
+}
+
+
+
+.metadata h3{
+
+    margin-bottom:15px;
+
+}
+
+
+
+.meta-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:10px 0;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+
+.meta-row:last-child{
+
+    border-bottom:none;
+
+}
+
+
+
+.meta-row span{
+
+    color:var(--secondary);
+
+}
+
+
 
 
 
@@ -283,7 +456,6 @@ POPUP
 
 
 
-
 .popup-box{
 
     width:380px;
@@ -298,22 +470,6 @@ POPUP
 
     text-align:center;
 
-    box-shadow:
-
-    0 25px 60px rgba(0,0,0,.25);
-
-    transform:scale(.95);
-
-    transition:.3s;
-
-}
-
-
-
-.popup-overlay.show .popup-box{
-
-    transform:scale(1);
-
 }
 
 
@@ -323,28 +479,6 @@ POPUP
     font-size:42px;
 
     margin-bottom:15px;
-
-}
-
-
-
-.popup-box h3{
-
-    font-size:24px;
-
-    margin-bottom:15px;
-
-}
-
-
-
-.popup-box p{
-
-    color:#64748b;
-
-    line-height:1.6;
-
-    margin-bottom:25px;
 
 }
 
@@ -364,21 +498,10 @@ POPUP
 
     color:white;
 
-    font-size:16px;
-
     cursor:pointer;
 
-    transition:.25s;
-
 }
 
-
-
-.popup-box button:hover{
-
-    background:#1d4ed8;
-
-}
 
 
 
@@ -393,47 +516,13 @@ footer{
 
     text-align:center;
 
-    color:#94a3b8;
-
-    font-size:14px;
+    color:var(--secondary);
 
     padding:20px;
 
 }
 
 
-
-
-
-/* =====================
-ANIMATION
-===================== */
-
-
-@keyframes appear{
-
-
-    from{
-
-        opacity:0;
-
-        transform:
-        translateY(20px);
-
-    }
-
-
-    to{
-
-        opacity:1;
-
-        transform:
-        translateY(0);
-
-    }
-
-
-}
 
 
 
@@ -467,7 +556,13 @@ MOBILE
 
         padding:12px;
 
-        border-radius:15px;
+    }
+
+
+
+    .metadata{
+
+        width:95vw;
 
     }
 
@@ -475,7 +570,7 @@ MOBILE
 
     .menu{
 
-        gap:12px;
+        gap:10px;
 
     }
 
