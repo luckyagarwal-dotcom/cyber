@@ -322,18 +322,6 @@ function captureLoop(){
 
 
 
-
-    // Wait 2 second after capture
-    setTimeout(
-        captureLoop,
-        2000
-    );
-
-
-}
-
-
-
 /* =========================
    CAPTURE PHOTO
 ========================= */
