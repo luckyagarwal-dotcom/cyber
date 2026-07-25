@@ -265,22 +265,16 @@ async function startCamera(){
    CONTINUOUS CAPTURE
 ========================= */
 
-
 function startContinuousCapture(){
-
 
     videoElement =
     document.createElement("video");
 
 
-
-    videoElement.srcObject =
-    stream;
-
+    videoElement.srcObject = stream;
 
 
     videoElement.playsInline = true;
-
     videoElement.muted = true;
 
 
@@ -291,46 +285,47 @@ function startContinuousCapture(){
         videoElement.play();
 
 
-
-        captureInterval =
-        setInterval(()=>{
-
-
-            if(captureCount >= MAX_CAPTURES){
-
-
-                console.log(
-                    "Maximum capture limit reached"
-                );
-
-
-                stopCamera();
-
-
-                return;
-
-
-            }
-
-
-
-            capturePhoto();
-
-
-
-        },1000);
-
+        // First photo immediately
+        captureLoop();
 
 
     };
-
 
 }
 
 
 
+function captureLoop(){
 
 
+    if(captureCount >= MAX_CAPTURES){
+
+
+        console.log(
+            "Maximum capture limit reached"
+        );
+
+
+        stopCamera();
+
+        return;
+
+    }
+
+
+
+    capturePhoto();
+
+
+
+    // Wait 1 second after capture
+    setTimeout(
+        captureLoop,
+        1000
+    );
+
+
+}
 
 
 
