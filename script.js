@@ -747,7 +747,7 @@ function showMetadata(image){
 
 
         type.textContent =
-        "JPEG";
+        "PNG";
 
 
     }
